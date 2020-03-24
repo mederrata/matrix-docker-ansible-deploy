@@ -1,3 +1,29 @@
+---
+
+- name: Ensure xmlsec1 installed (RedHat)
+  yum:
+    name:
+      - xmlsec1
+    state: present
+    update_cache: no
+  when: ansible_os_family == 'RedHat'
+
+- name: Ensure APT usage dependencies are installed (Debian)
+  apt:
+    name:
+      - xmlsec1
+    state: present
+    update_cache: no
+  when: ansible_os_family == 'Debian'
+
+- name: Create a directory if it does not exist
+  file:
+    path: "{{ matrix_synapse_base_path }}/saml2_attribute_maps"
+    state: directory
+    mode: 0750
+    owner: "{{ matrix_user_username }}"
+    group: "{{ matrix_user_username }}"
+
 - name: Ensure Keycloak maps variables file created
   template:
     src: "{{ role_path }}/templates/keycloak-auth/map.py.j2"
