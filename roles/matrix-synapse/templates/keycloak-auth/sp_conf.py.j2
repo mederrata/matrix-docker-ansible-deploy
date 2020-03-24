@@ -8,7 +8,7 @@ from saml2.saml import NAME_FORMAT_URI
 BASE = "https://matrix.{{ matrix_domain }}"
 
 CONFIG = {
-    "entityid": "Mederratachat-duckdns-org",
+    "entityid": "{{ matrix_synapse_keycloak_entity_id }}",
     "description": "Matrix Server",
     "service": {
         "sp": {
