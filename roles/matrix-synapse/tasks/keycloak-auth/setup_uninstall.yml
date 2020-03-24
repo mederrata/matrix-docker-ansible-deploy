@@ -9,6 +9,6 @@
     state: absent
   with_items:
     - "idp.xml"
-    - "sp_config.py"
+    - "sp_conf.py"
     - "cert.pem"
     - "key.pem"
