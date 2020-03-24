@@ -1,0 +1,14 @@
+- name: Ensure Keycloak maps file doesn't exist
+  file:
+    path: "{{ matrix_synapse_base_path }}/saml2_attribute_maps/map.py"
+    state: absent
+
+- name: Ensure matrix Keycloak maps file doesn't exist
+  file:
+    path: "{{ matrix_synapse_config_dir_path }}/{{ item }}"
+    state: absent
+  with_items:
+    - "idp.xml"
+    - "sp_config.py"
+    - "cert.pem"
+    - "key.pem"
