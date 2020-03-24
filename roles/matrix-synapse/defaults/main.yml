@@ -396,3 +396,13 @@ matrix_synapse_configuration_extension: "{{ matrix_synapse_configuration_extensi
 # Holds the final Synapse configuration (a combination of the default and its extension).
 # You most likely don't need to touch this variable. Instead, see `matrix_synapse_configuration_yaml`.
 matrix_synapse_configuration: "{{ matrix_synapse_configuration_yaml|from_yaml|combine(matrix_synapse_configuration_extension, recursive=True) }}"
+
+## Added Key Cloak Variables
+
+matrix_synapse_keycloak_enabled: false
+matrix_synapse_keycloak_domain_name: localhost:8443
+matrix_synapse_keycloak_realm_name: master
+matrix_synapse_keycloak_private_key: ''
+matrix_synapse_keycloak_certificate: ''
+matrix_synapse_keycloak_openssl_private_key: ''
+matrix_synapse_keycloak_openssl_certification: ''
