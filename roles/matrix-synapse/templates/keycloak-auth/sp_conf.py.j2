@@ -31,17 +31,17 @@ CONFIG = {
         }
     },
     "debug": 0,
-    "key_file": "{{ matrix_synapse_base_path }}/config/key.pem",
-    "cert_file": "{{ matrix_synapse_base_path }}/config/cert.pem",
+    "key_file": "/data/key.pem",
+    "cert_file": "/data/cert.pem",
     "encryption_keypairs": [
         {
-            "key_file": "{{ matrix_synapse_base_path }}/config/key.pem",
-            "cert_file": "{{ matrix_synapse_base_path }}/config/cert.pem",
+            "key_file": "/data/key.pem",
+            "cert_file": "/data/cert.pem",
         }
     ],
-    "attribute_map_dir": "{{ matrix_synapse_base_path }}/saml2_attribute_maps/",
+    "attribute_map_dir": "/data/saml2_attribute_maps/",
     "metadata": {
-        "local": ["{{ matrix_synapse_base_path }}/config/idp.xml"]
+        "local": ["/data/idp.xml"]
     },
     # If you want to have organization and contact_person for the pysaml2 config
     #"organization": {
