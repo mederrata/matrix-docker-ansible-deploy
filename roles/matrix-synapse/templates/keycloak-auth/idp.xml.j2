@@ -19,7 +19,7 @@
 
 <EntitiesDescriptor Name="urn:keycloak" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
 					xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
-	<EntityDescriptor entityID="{{ matrix_synapse_keycloak_entity_id }}">
+	<EntityDescriptor entityID="https://{{ matrix_synapse_keycloak_domain_name }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}">
 		<IDPSSODescriptor WantAuthnRequestsSigned="true"
 			protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
                         <KeyDescriptor use="signing">
