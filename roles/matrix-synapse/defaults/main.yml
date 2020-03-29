@@ -400,7 +400,8 @@ matrix_synapse_configuration: "{{ matrix_synapse_configuration_yaml|from_yaml|co
 ## Added Key Cloak Variables
 
 matrix_synapse_keycloak_enabled: false
-matrix_synapse_keycloak_domain_name: localhost:8443
+matrix_synapse_keycloak_domain_name: localhost
+matrix_synapse_keycloak_http_port: 8443
 matrix_synapse_keycloak_realm_name: master
 matrix_synapse_keycloak_private_key: ''
 matrix_synapse_keycloak_certificate: ''

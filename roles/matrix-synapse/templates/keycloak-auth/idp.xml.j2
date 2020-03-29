@@ -19,7 +19,7 @@
 
 <EntitiesDescriptor Name="urn:keycloak" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
 					xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
-	<EntityDescriptor entityID="https://{{ matrix_synapse_keycloak_domain_name }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}">
+	<EntityDescriptor entityID="https://{{ matrix_synapse_keycloak_domain_name }}:{{ matrix_synapse_keycloak_http_port }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}">
 		<IDPSSODescriptor WantAuthnRequestsSigned="true"
 			protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
                         <KeyDescriptor use="signing">
@@ -33,22 +33,22 @@
 
 			<SingleLogoutService
 					Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-					Location="https://{{ matrix_synapse_keycloak_domain_name }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}/protocol/saml" />
+					Location="https://{{ matrix_synapse_keycloak_domain_name }}:{{ matrix_synapse_keycloak_http_port }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}/protocol/saml" />
 			<SingleLogoutService
 					Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
-					Location="https://{{ matrix_synapse_keycloak_domain_name }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}/protocol/saml" />
+					Location="https://{{ matrix_synapse_keycloak_domain_name }}:{{ matrix_synapse_keycloak_http_port }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}/protocol/saml" />
 			<NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
 			<NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
 			<NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</NameIDFormat>
 			<NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</NameIDFormat>
 			<SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-				Location="https://{{ matrix_synapse_keycloak_domain_name }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}/protocol/saml" />
+				Location="https://{{ matrix_synapse_keycloak_domain_name }}:{{ matrix_synapse_keycloak_http_port }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}/protocol/saml" />
 			<SingleSignOnService
 				Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
-				Location="https://{{ matrix_synapse_keycloak_domain_name }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}/protocol/saml" />
+				Location="https://{{ matrix_synapse_keycloak_domain_name }}:{{ matrix_synapse_keycloak_http_port }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}/protocol/saml" />
 			<SingleSignOnService
 				Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
-				Location="https://{{ matrix_synapse_keycloak_domain_name }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}/protocol/saml" />
+				Location="https://{{ matrix_synapse_keycloak_domain_name }}:{{ matrix_synapse_keycloak_http_port }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}/protocol/saml" />
 		</IDPSSODescriptor>
 	</EntityDescriptor>
 </EntitiesDescriptor>
