@@ -1,0 +1,30 @@
+#jinja2: lstrip_blocks: "True"
+[Unit]
+Description=Keycloak
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+ExecStartPre=-/usr/bin/docker kill matrix-keycloak
+ExecStartPre=-/usr/bin/docker rm matrix-keycloak
+
+ExecStart=/usr/bin/docker run --rm --name matrix-keycloak \
+			--log-driver=none \
+			--user={{ matrix_user_uid }}:{{ matrix_user_gid }} \
+			--network={{ matrix_docker_network }} \
+			-p {{ matrix_keycloak_host_bind_port }}:8080 \
+			-e DB_VENDOR=postgres -e DB_ADDR={{ matrix_synapse_database_host }} \
+			{% for arg in matrix_keycloak_container_extra_arguments %}
+			{{ arg }} \
+			{% endfor %}
+			{{ matrix_keycloak_docker_image }}
+
+ExecStop=-/usr/bin/docker kill matrix-keycloak
+ExecStop=-/usr/bin/docker rm matrix-keycloak
+Restart=always
+RestartSec=30
+SyslogIdentifier=matrix-keycloak
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,88 @@
+---
+
+#
+# Tasks related to setting up Keycloak
+#
+
+- name: Ensure Keycloak paths exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0750
+    owner: "{{ matrix_user_username }}"
+    group: "{{ matrix_user_username }}"
+  with_items:
+    - "{{ matrix_keycloak_base_path }}"
+    - "{{ matrix_keycloak_config_dir_path }}"
+  when: matrix_keycloak_enabled|bool
+
+- name: Ensure Keycloak configuration file created
+  template:
+    src: "{{ role_path }}/templates/config.json.j2"
+    dest: "{{ matrix_keycloak_config_dir_path }}/config.json"
+    owner: "{{ matrix_user_username }}"
+    group: "{{ matrix_user_username }}"
+    mode: 0640
+  when: matrix_keycloak_enabled|bool
+
+- name: Ensure Keycloak image is pulled
+  docker_image:
+    name: "{{ matrix_keycloak_docker_image }}"
+    source: "{{ 'pull' if ansible_version.major > 2 or ansible_version.minor > 7 else omit }}"
+    force_source: "{{ matrix_keycloak_docker_image_force_pull if ansible_version.major > 2 or ansible_version.minor >= 8 else omit }}"
+    force: "{{ omit if ansible_version.major > 2 or ansible_version.minor >= 8 else matrix_keycloak_docker_image_force_pull }}"
+  when: matrix_keycloak_enabled|bool
+
+- name: Ensure matrix-keycloak.service installed
+  template:
+    src: "{{ role_path }}/templates/systemd/matrix-keycloak.service.j2"
+    dest: "{{ matrix_systemd_path }}/matrix-keycloak.service"
+    mode: 0644
+  register: matrix_keycloak_systemd_service_result
+  when: matrix_keycloak_enabled|bool
+
+- name: Ensure systemd reloaded after matrix-keycloak.service installation
+  service:
+    daemon_reload: yes
+  when: "matrix_keycloak_enabled|bool and matrix_keycloak_systemd_service_result.changed"
+
+#
+# Tasks related to getting rid of the Keycloak (if it was previously enabled)
+#
+
+- name: Check existence of matrix-keycloak service
+  stat:
+    path: "{{ matrix_systemd_path }}/matrix-keycloak.service"
+  register: matrix_keycloak_service_stat
+  when: "not matrix_keycloak_enabled|bool"
+
+- name: Ensure matrix-keycloak is stopped
+  service:
+    name: matrix-keycloak
+    state: stopped
+    daemon_reload: yes
+  register: stopping_result
+  when: "not matrix_keycloak_enabled|bool and matrix_keycloak_service_stat.stat.exists"
+
+- name: Ensure matrix-keycloak.service doesn't exist
+  file:
+    path: "{{ matrix_systemd_path }}/matrix-keycloak.service"
+    state: absent
+  when: "not matrix_keycloak_enabled|bool and matrix_keycloak_service_stat.stat.exists"
+
+- name: Ensure systemd reloaded after matrix-keycloak.service removal
+  service:
+    daemon_reload: yes
+  when: "not matrix_keycloak_enabled|bool and matrix_keycloak_service_stat.stat.exists"
+
+- name: Ensure Keycloak data path doesn't exist
+  file:
+    path: "{{ matrix_keycloak_base_path }}"
+    state: absent
+  when: "not matrix_keycloak_enabled|bool"
+
+- name: Ensure Keycloak Docker image doesn't exist
+  docker_image:
+    name: "{{ matrix_keycloak_docker_image }}"
+    state: absent
+  when: "not matrix_keycloak_enabled|bool"

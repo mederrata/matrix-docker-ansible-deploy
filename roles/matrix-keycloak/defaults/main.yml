@@ -1,0 +1,13 @@
+matrix_keycloak_enabled: true
+
+matrix_keycloak_base_path: "{{ matrix_base_data_path }}/keycloak"
+
+matrix_keycloak_docker_image: "jboss/keycloak:9.0.2"
+matrix_keycloak_docker_image_force_pull: "{{ matrix_keycloak_docker_image.endswith(':latest') }}"
+
+matrix_keycloak_host_bind_port: "8443"
+
+matrix_keycloak_config_dir_path: "{{ matrix_keycloak_base_path }}/config"
+
+matrix_keycloak_keycloakd_required_services_list: ['docker.service']
+matrix_keycloak_container_extra_arguments: []
