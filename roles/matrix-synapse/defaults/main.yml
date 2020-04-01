@@ -402,8 +402,6 @@ matrix_synapse_keycloak_enabled: false
 matrix_synapse_keycloak_domain_name: localhost
 matrix_synapse_keycloak_http_port: 8443
 matrix_synapse_keycloak_realm_name: master
-matrix_synapse_keycloak_private_key: ''
-matrix_synapse_keycloak_certificate: ''
 matrix_synapse_keycloak_openssl_private_key: ''
 matrix_synapse_keycloak_openssl_certification: ''
 matrix_synapse_keycloak_entity_id: ''
