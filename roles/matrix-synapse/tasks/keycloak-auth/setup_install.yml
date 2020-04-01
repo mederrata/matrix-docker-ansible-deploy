@@ -44,4 +44,33 @@
     - "sp_conf.py"
     - "key.pem"
     - "cert.pem"
+
+- name: Attempt to download idp.xml
+  get_url:
+    url: "{{ matrix_synapse_keycloak_domain_name }}:{{ matrix_synapse_keycloak_http_port }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}/protocol/saml/descriptor"
+    dest: "{{ matrix_synapse_config_dir_path }}/idp.xml"
+    mode: 0644
+    owner: "{{ matrix_user_username }}"
+    group: "{{ matrix_user_username }}"
+    body_format: form-urlencoded
+  register: matrix_synapse_keycloak_idp
+
+- name: Create Idp.xml
+  template:
+    src: "{{ role_path }}/templates/keycloak-auth/idp.xml.j2"
+    dest: "{{ matrix_synapse_config_dir_path }}/idp.xml"
+    mode: 0644
+    owner: "{{ matrix_user_username }}"
+    group: "{{ matrix_user_username }}"
+  vars:
+    idp_url: "{{ matrix_synapse_keycloak_domain_name }}:{{ matrix_synapse_keycloak_http_port }}/auth/realms/{{ matrix_synapse_keycloak_realm_name }}/protocol/saml/descriptor"
+    client_panel_url: "https://{{ matrix_synapse_keycloak_domain_name }}:{{ matrix_synapse_keycloak_http_port }}/auth/admin/master/console/{{ '#' }}/realms/internalchat/clients"
+  debug:
+    msg: 
+      - "Cannot access keycloak server. idp.xml is created without an certificate"
+      - "You can run disable client security required at {{ client_panel_url }}"
+      - "Navigate to {{matrix_synapse_keycloak_entity_id }} and disable Client Signature Required"
+      - "Please run wget  {{ idp_url }} -o {{ matrix_synapse_config_dir_path }}/idp.xml"
+      - "and chown {{ matrix_user_username }}:{{ matrix_user_username }} {{ matrix_synapse_config_dir_path }}/idp.xml on your machine."
+  when: "not matrix_synapse_keycloak_idp.stats.exists"
     
