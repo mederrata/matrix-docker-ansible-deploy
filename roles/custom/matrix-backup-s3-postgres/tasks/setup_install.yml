@@ -1,0 +1,40 @@
+---
+
+#
+# Tasks related to setting up an internal postgres server
+#
+- when: matrix_postgres_s3_backup_enabled | bool
+  block:
+    - name: Fail with matrix_backup_borg_version advice if Postgres not enabled
+      ansible.builtin.fail:
+        msg: >-
+          You are not running a built-in Postgres server (`devture_postgres_enabled: false`), so auto-detecting its version and setting `matrix_backup_borg_version` automatically based on that cannot happen.
+          Consider setting `matrix_backup_borg_version` to your Postgres version manually.
+      when: not devture_postgres_enabled
+
+    - ansible.builtin.include_role:
+        name: galaxy/com.devture.ansible.role.postgres
+        tasks_from: detect_existing_postgres_version
+
+- name: Ensure APT usage dependencies are installed
+  ansible.builtin.apt:
+    name:
+      - awscli
+    state: present
+    update_cache: true
+
+- name: Ensure matrix-postgres-s3-backup.timer is installed
+  template:
+    src: "{{ role_path }}/templates/systemd/{{ item }}.j2"
+    dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ item }}"
+    mode: 0644
+  with_items:
+    - "matrix-postgres-s3-backup.timer"
+    - "matrix-postgres-s3-backup.service"
+  register: matrix_postgres_systemd_backup_timer_result
+  when: devture_postgres_enabled|bool and matrix_postgres_s3_backup_enabled|bool
+
+- name: Ensure systemd reloaded after matrix-postgres-s3-backup.timer installation
+  service:
+    daemon_reload: yes
+  when: "devture_postgres_enabled|bool and matrix_postgres_systemd_backup_timer_result.changed"

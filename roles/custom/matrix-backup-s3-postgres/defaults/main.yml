@@ -1,0 +1,7 @@
+---
+# Enable Remote AWS s3 backups
+# matrix_postgres_s3_backup_bucket value should include the prefix
+# Example value
+# matrix_postgres_s3_backup_bucket: s3://example-bucket/matrix-prefix/
+matrix_postgres_s3_backup_enabled: false
+matrix_postgres_s3_backup_bucket: ""

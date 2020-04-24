@@ -1,0 +1,25 @@
+---
+
+- name: Check existence of matrix-postgres-s3-backup timer
+  ansible.builtin.stat:
+    path: "{{ devture_systemd_docker_base_systemd_path }}/matrix-postgres-s3-backup.timer"
+  register: matrix_postgres_s3_backup_timer_stat
+
+- when: matrix_postgres_s3_backup_timer_stat.stat.exists | bool
+  block:
+    - name: Ensure matrix-postgres-s3-backup is stopped
+      ansible.builtin.service:
+        name: matrix-postgres-s3-backup
+        state: stopped
+        enabled: false
+        daemon_reload: true
+
+    - name: Ensure matrix-postgres-s3-backup.service doesn't exist
+      ansible.builtin.file:
+        path: "{{ devture_systemd_docker_base_systemd_path }}/matrix-postgres-s3-backup.service"
+        state: absent
+
+    - name: Ensure matrix-postgres-s3-backup.timer doesn't exist
+      ansible.builtin.file:
+        path: "{{ devture_systemd_docker_base_systemd_path }}/matrix-postgres-s3-backup.timer"
+        state: absent
