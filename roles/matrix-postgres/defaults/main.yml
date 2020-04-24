@@ -30,3 +30,11 @@ matrix_postgres_container_extra_arguments: []
 #
 # Takes an "<ip>:<port>" or "<port>" value (e.g. "127.0.0.1:5432"), or empty string to not expose.
 matrix_postgres_container_postgres_bind_port: ""
+
+
+# Enable Remote AWS s3 backups
+# matrix_postgres_s3_backup_bucket value should include the prefix
+# Example value
+# matrix_postgres_s3_backup_bucket: s3://example-bucket/matrix-prefix/
+matrix_postgres_s3_backup_enabled: false
+matrix_postgres_s3_backup_bucket: ""
