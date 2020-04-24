@@ -3,3 +3,7 @@
 - set_fact:
     matrix_systemd_services_list: "{{ matrix_systemd_services_list + ['matrix-postgres.service'] }}"
   when: matrix_postgres_enabled|bool
+
+- set_fact:
+    matrix_systemd_services_list: "{{ matrix_systemd_services_list + ['matrix-postgres-s3-backup.timer'] }}"
+  when: "matrix_postgres_enabled|bool and matrix_postgres_s3_backup_enabled|bool"

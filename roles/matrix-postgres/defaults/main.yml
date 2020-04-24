@@ -108,3 +108,10 @@ matrix_postgres_pgloader_docker_image: "{{ matrix_postgres_pgloader_docker_image
 matrix_postgres_pgloader_docker_image_name_prefix: "{{ 'localhost/' if matrix_postgres_pgloader_container_image_self_build else matrix_container_global_registry_prefix }}"
 matrix_postgres_pgloader_docker_image_tag: "3.6.2"
 matrix_postgres_pgloader_docker_image_force_pull: "{{ matrix_postgres_pgloader_docker_image.endswith(':latest') }}"
+
+# Enable Remote AWS s3 backups
+# matrix_postgres_s3_backup_bucket value should include the prefix
+# Example value
+# matrix_postgres_s3_backup_bucket: s3://example-bucket/matrix-prefix/
+matrix_postgres_s3_backup_enabled: false
+matrix_postgres_s3_backup_bucket: ""

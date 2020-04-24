@@ -156,6 +156,21 @@
       }}
   when: "matrix_postgres_enabled|bool and matrix_postgres_data_backup_path_stat.stat.exists"
 
+- name: Ensure matrix-postgres-s3-backup.timer is installed
+  template:
+    src: "{{ role_path }}/templates/systemd/{{ item }}.j2"
+    dest: "{{ matrix_systemd_path }}/{{ item }}"
+    mode: 0644
+  with_items:
+    - "matrix-postgres-s3-backup.timer"
+    - "matrix-postgres-s3-backup.service"
+  register: matrix_postgres_systemd_backup_timer_result
+  when: matrix_postgres_enabled|bool and matrix_postgres_s3_backup_enabled|bool
+
+- name: Ensure systemd reloaded after matrix-postgres-s3-backup.timer installation
+  service:
+    daemon_reload: yes
+  when: "matrix_postgres_enabled|bool and matrix_postgres_systemd_backup_timer_result.changed"
 
 #
 # Tasks related to getting rid of the internal postgres server (if it was previously enabled)
@@ -184,6 +199,39 @@
   service:
     daemon_reload: true
   when: "not matrix_postgres_enabled|bool and matrix_postgres_service_stat.stat.exists"
+
+- name: Check existence of matrix-postgres-s3-backup timer
+  stat:
+    path: "{{ matrix_systemd_path }}/matrix-postgres-s3-backup.timer"
+  register: matrix_postgres_s3_backup_timer_stat
+  when: "not matrix_postgres_enabled|bool or not matrix_postgres_s3_backup_enabled|bool"
+
+- name: Ensure matrix-postgres-s3-backup is stopped
+  service:
+    name: matrix-postgres-s3-backup.timer
+    state: stopped
+    daemon_reload: yes
+  when:
+    - (not matrix_postgres_enabled|bool or not matrix_postgres_s3_backup_enabled|bool) 
+    - matrix_postgres_s3_backup_timer_stat.stat.exists|bool
+
+- name: Ensure matrix-postgres-s3-backup.timer and matrix-postgres-s3-backup.service doesn't exist
+  file:
+    path: "{{ matrix_systemd_path }}/{{ item }}"
+    state: absent
+  with_items:
+    - "matrix-postgres-s3-backup.timer"
+    - "matrix-postgres-s3-backup.service"
+  when:
+    - (not matrix_postgres_enabled|bool or not matrix_postgres_s3_backup_enabled|bool)
+    - matrix_postgres_s3_backup_timer_stat.stat.exists|bool
+
+- name: Ensure systemd reloaded after matrix-postgres-s3-backup timer
+  service:
+    daemon_reload: yes
+  when:
+    - (not matrix_postgres_enabled|bool or not matrix_postgres_s3_backup_enabled|bool)
+    - matrix_postgres_s3_backup_timer_stat.stat.exists|bool
 
 - name: Check existence of matrix-postgres local data path
   stat:
