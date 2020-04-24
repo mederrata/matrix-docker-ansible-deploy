@@ -6,6 +6,7 @@
       - apt-transport-https
       - ca-certificates
       - gpg
+      - awscli
     state: present
     update_cache: yes
 
