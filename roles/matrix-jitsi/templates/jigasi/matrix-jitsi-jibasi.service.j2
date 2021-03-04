@@ -1,0 +1,36 @@
+#jinja2: lstrip_blocks: "True"
+[Unit]
+Description=Matrix jitsi-jigasi server
+{% for service in matrix_jitsi_jigasi_systemd_required_services_list %}
+Requires={{ service }}
+After={{ service }}
+{% endfor %}
+DefaultDependencies=no
+
+[Service]
+Type=simple
+Environment="HOME={{ matrix_systemd_unit_home_path }}"
+ExecStartPre=-{{ matrix_host_command_sh }} -c '{{ matrix_host_command_docker }} kill matrix-jitsi-jigasi 2>/dev/null'
+ExecStartPre=-{{ matrix_host_command_sh }} -c '{{ matrix_host_command_docker }} rm matrix-jitsi-jigasi 2>/dev/null'
+
+ExecStart={{ matrix_host_command_docker }} run --rm --name matrix-jitsi-jigasi \
+			--log-driver=none \
+			--network={{ matrix_docker_network }} \
+			--env-file={{ matrix_jitsi_jigasi_base_path }}/env \
+			{% if matrix_jitsi_jigasi_container_host_bind_port %}
+			-p {{ matrix_jitsi_jigasi_container_host_bind_port }}:{{ matrix_jitsi_jigasi_sip_port }} \
+			{% endif %}
+			--mount type=bind,src={{ matrix_jitsi_jigasi_config_path }},dst=/config \
+			{% for arg in matrix_jitsi_jigasi_container_extra_arguments %}
+			{{ arg }} \
+			{% endfor %}
+			{{ matrix_jitsi_jigasi_docker_image }}
+
+ExecStop=-{{ matrix_host_command_sh }} -c '{{ matrix_host_command_docker }} kill matrix-jitsi-jigasi 2>/dev/null'
+ExecStop=-{{ matrix_host_command_sh }} -c '{{ matrix_host_command_docker }} rm matrix-jitsi-jigasi 2>/dev/null'
+Restart=always
+RestartSec=30
+SyslogIdentifier=matrix-jitsi-jigasi
+
+[Install]
+WantedBy=multi-user.target
