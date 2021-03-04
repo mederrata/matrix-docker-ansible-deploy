@@ -15,7 +15,7 @@ ExecStart={{ matrix_host_command_docker }} run --rm --name matrix-jitsi-jibri \
 			--log-driver=none \
 			--network={{ matrix_docker_network }} \
 			--env-file={{ matrix_jitsi_jibri_base_path }}/env \
-            --device=/dev/snd:/dev/snd \
+			--device=/dev/snd:/dev/snd \
 			--mount type=bind,src={{ matrix_jitsi_jibri_base_path }},dst={{ matrix_jitsi_jibri_base_path }} \
 			{% for arg in matrix_jitsi_jibri_container_extra_arguments %}
 			{{ arg }} \
