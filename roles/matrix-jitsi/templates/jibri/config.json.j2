@@ -1,0 +1,30 @@
+{
+    "recording_directory":{{ matrix_jitsi_jibri_recording_path|string|to_json }},
+    "finalize_recording_script_path": {{ matrix_jitsi_jibri_finalize_recording_script_path|string|to_json }},
+    "xmpp_environments": [
+        {
+            "name": "prod environment",
+            "xmpp_server_hosts": [
+                {{ matrix_jitsi_xmpp_server|string|to_json }}
+            ],
+            "xmpp_domain": {{ matrix_jitsi_xmpp_domain|string|to_json }},
+            "control_login": {
+                "domain": {{ matrix_jitsi_xmpp_auth_domain|string|to_json }},
+                "username": {{ matrix_jitsi_jibri_xmpp_user|string|to_json }},
+                "password": {{ matrix_jitsi_jibri_xmpp_password|string|to_json }}
+            },
+            "control_muc": {
+                "domain": {{ matrix_jitsi_xmpp_internal_muc_domain|string|to_json }},
+                "room_name": {{ matrix_jitsi_jibri_brewery_muc|string|to_json }},
+                "nickname": "jibri-instance-1"
+            },
+            "call_login": {
+                "domain": {{ matrix_jitsi_recorder_domain|string|to_json }},
+                "username": {{ matrix_jitsi_jibri_recorder_user|string|to_json }},
+                "password": {{ matrix_jitsi_jibri_recorder_password|string|to_json }}
+            },
+            "room_jid_domain_string_to_strip_from_start": {{ matrix_jitsi_jibri_strip_domain_jid|string|to_json }},
+            "usage_timeout": "0"
+        }
+    ]
+}
