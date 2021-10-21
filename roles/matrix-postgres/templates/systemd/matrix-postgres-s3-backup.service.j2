@@ -13,5 +13,5 @@ ExecStartPre=/bin/sh -c '/usr/bin/docker run --rm \
 				{{ matrix_postgres_docker_image_to_use }} \
 				pg_dumpall -h matrix-postgres | gzip -c > /tmp/postgres-backup.sql.gz'
 
-ExecStart=/bin/sh -c 'aws s3 cp /tmp/postgres-backup.sql.gz ${AWS_BUCKET_NAME}$$(date +%%m-%%d-%%Y)/ && rm /tmp/postgres-backup.sql.gz'
+ExecStart=/bin/sh -c 'aws s3 cp /tmp/postgres-backup.sql.gz ${AWS_BUCKET_NAME}$$(date +%%Y-%%m-%%d)/ && rm /tmp/postgres-backup.sql.gz'
 Group=systemd-journal
