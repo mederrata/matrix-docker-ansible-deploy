@@ -1,0 +1,9 @@
+---
+
+- name: Fail if required s3 bucket settings not defined
+  ansible.builtin.fail:
+    msg: >-
+      You need to define a required configuration setting (`{{ item.name }}`).
+  when: "item.when | bool and vars[item.name] == ''"
+  with_items:
+    - {'name': 'matrix_postgres_s3_backup_bucket', when: "{{ matrix_postgres_s3_backup_enabled }}"}
