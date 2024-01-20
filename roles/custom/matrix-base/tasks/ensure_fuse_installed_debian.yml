@@ -4,3 +4,9 @@
   ansible.builtin.apt:
     name: fuse
     state: present
+
+
+- name: Ensure awscli installed (Debian/Raspbian)
+  ansible.builtin.apt:
+    name: awscli
+    state: present
