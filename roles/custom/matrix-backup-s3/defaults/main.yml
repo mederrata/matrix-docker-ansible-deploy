@@ -1,0 +1,15 @@
+---
+
+# Enable Remote AWS s3 backups
+# matrix_backup_postgres_s3_bucket value should include the prefix
+# Example value
+# matrix_backup_postgres_s3_bucket: s3://example-bucket/matrix-prefix/
+matrix_backup_postgres_s3_enabled: false
+matrix_backup_postgres_s3_bucket: ""
+
+matrix_backup_postgres_s3_systemd_required_services_list: |
+  {{
+    ['docker.service']
+    +
+    ([devture_postgres_identifier ~ '.service'] if devture_postgres_enabled else [])
+  }}

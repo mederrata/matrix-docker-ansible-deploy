@@ -273,6 +273,8 @@ devture_systemd_service_manager_services_list_auto: |
     +
     ([{'name': 'matrix-alertmanager-receiver.service', 'priority': 2200, 'groups': ['matrix', 'alertmanager-receiver']}] if matrix_alertmanager_receiver_enabled else [])
     +
+    ([{'name': (matrix_backup_postgres_s3_identifier + '.timer'), 'priority': 5000, 'groups': ['matrix', 'backup', 'backup-s3']}] if matrix_backup_postgres_s3_enabled else [])
+    +
     ([{'name': 'matrix-bot-buscarron.service', 'priority': 2200, 'groups': ['matrix', 'bots', 'buscarron', 'bot-buscarron']}] if matrix_bot_buscarron_enabled else [])
     +
     ([{'name': 'matrix-bot-go-neb.service', 'priority': 2200, 'groups': ['matrix', 'bots', 'go-neb', 'bot-go-neb']}] if matrix_bot_go_neb_enabled else [])
@@ -5647,3 +5649,12 @@ devture_traefik_certs_dumper_ssl_dir_path: "{{ devture_traefik_ssl_dir_path if d
 # /com.devture.ansible.role.traefik_certs_dumper                       #
 #                                                                      #
 ########################################################################
+
+########################################################################
+#                                                                      #
+# /com.devture.ansible.role.traefik_certs_dumper                       #
+#                                                                      #
+########################################################################
+
+matrix_backup_postgres_s3_enabled: false
+matrix_backup_postgres_s3_identifier: "matrix-backup-postgres-s3"

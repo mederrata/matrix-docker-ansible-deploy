@@ -1,0 +1,27 @@
+
+#jinja2: lstrip_blocks: "True"
+
+[Unit]
+Description=Backup service for Matrix Postgres Server
+{% for service in matrix_backup_postgres_s3_systemd_required_services_list %}
+Requires={{ service }}
+After={{ service }}
+{% endfor %}
+{% for service in matrix_backup_postgres_s3_systemd_required_services_list %}
+Wants={{ service }}
+{% endfor %}
+
+
+[Service]
+Environment=AWS_BUCKET_NAME={{ matrix_backup_postgres_s3_bucket }}
+Type=oneshot
+ExecStartPre=/bin/sh -c '{{ devture_systemd_docker_base_host_command_docker }} \
+				run --rm --name matrix-s3-bucket-export \
+				--network={{ devture_postgres_container_network }} \
+				--env-file={{ devture_postgres_base_path }}/env-postgres-psql \
+				--user={{ devture_postgres_uid }}:{{ devture_postgres_gid }} \
+				{{ devture_postgres_container_image_latest }} \
+				pg_dumpall -h matrix-postgres | gzip -c > /tmp/postgres-backup.sql.gz'
+
+ExecStart=/bin/sh -c 'aws s3 cp /tmp/postgres-backup.sql.gz ${AWS_BUCKET_NAME}$$(date +%%Y-%%m-%%d)/ && rm /tmp/postgres-backup.sql.gz'
+Group=systemd-journal 
