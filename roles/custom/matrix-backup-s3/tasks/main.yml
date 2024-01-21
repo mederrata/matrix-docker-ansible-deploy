@@ -6,12 +6,12 @@
     - install-all
     - install-backup-s3
   block:
-    - when: matrix_postgres_backup_s3_enabled | bool
+    - when: matrix_backup_postgres_s3_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/setup_install.yml"
 
 - tags:
     - setup-all
     - setup-backup-s3
   block:
-    - when: not matrix_postgres_backup_s3_enabled | bool
+    - when: not matrix_backup_postgres_s3_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/setup_uninstall.yml"

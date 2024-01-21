@@ -1,13 +1,13 @@
 ---
 
 # Enable Remote AWS s3 backups
-# matrix_postgres_backup_s3_bucket value should include the prefix
+# matrix_backup_postgres_s3_bucket value should include the prefix
 # Example value
-# matrix_postgres_backup_s3_bucket: s3://example-bucket/matrix-prefix/
-matrix_postgres_backup_s3_enabled: false
-matrix_postgres_backup_s3_bucket: ""
+# matrix_backup_postgres_s3_bucket: s3://example-bucket/matrix-prefix/
+matrix_backup_postgres_s3_enabled: false
+matrix_backup_postgres_s3_bucket: ""
 
-matrix_postgres_backup_s3_systemd_required_services_list: |
+matrix_backup_postgres_s3_systemd_required_services_list: |
   {{
     ['docker.service']
     +
