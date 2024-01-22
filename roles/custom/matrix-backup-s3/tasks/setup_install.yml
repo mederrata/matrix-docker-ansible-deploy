@@ -19,5 +19,5 @@
     mode: 0644
   when: "matrix_backup_postgres_s3_enabled | bool"
   with_items:
-    - {{matrix_backup_postgres_s3_identifier}}.service
-    - {{matrix_backup_postgres_s3_identifier}}.timer
+    - "{{matrix_backup_postgres_s3_identifier}}.service"
+    - "{{matrix_backup_postgres_s3_identifier}}.timer"
