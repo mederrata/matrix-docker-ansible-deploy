@@ -3,10 +3,10 @@
 - name: Check existence of matrix-postgres-backup-s3 service
   ansible.builtin.stat:
     path: "{{ devture_systemd_docker_base_systemd_path }}/{{matrix_backup_postgres_s3_identifier}}.service"
-  register: matrix-postgres-backup-s3_service_stat
+  register: matrix_postgres_backup_s3_service_stat
   when: "not matrix_backup_postgres_s3_enabled | bool"
 
-- when: matrix-postgres-backup-s3_service_stat.stat.exists | bool
+- when: matrix_postgres_backup_s3_service_stat.stat.exists | bool
   block:
     - name: Ensure matrix-postgres-backup-s3.timer is stopped
       ansible.builtin.service:
