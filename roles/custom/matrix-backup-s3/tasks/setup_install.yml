@@ -1,0 +1,23 @@
+---
+
+- name: Ensure matrix-postgres-backup-s3.service installed
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/systemd/{{ item }}.j2"
+    dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ item }}"
+    mode: 0644
+  with_items:
+    - "{{matrix_backup_postgres_s3_identifier}}.timer"
+    - "{{matrix_backup_postgres_s3_identifier}}.service"
+
+# This may be unnecessary when more long-lived certificates are used.
+# We optimize for the common use-case though (short-lived Let's Encrypt certificates).
+# Reloading doesn't hurt anyway, so there's no need to make this more flexible.
+- name: Ensure reloading systemd units installed, if necessary
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/systemd/{{ item }}.j2"
+    dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ item }}"
+    mode: 0644
+  when: "matrix_backup_postgres_s3_enabled | bool"
+  with_items:
+    - "{{matrix_backup_postgres_s3_identifier}}.service"
+    - "{{matrix_backup_postgres_s3_identifier}}.timer"

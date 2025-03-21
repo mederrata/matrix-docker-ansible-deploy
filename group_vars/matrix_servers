@@ -285,6 +285,8 @@ devture_systemd_service_manager_services_list_auto: |
   {{
     ([{'name': (backup_borg_identifier + '.timer'), 'priority': 5000, 'groups': ['matrix', 'backup', 'borg']}] if backup_borg_enabled else [])
     +
+    ([{'name': (matrix_backup_postgres_s3_identifier + '.timer'), 'priority': 5000, 'groups': ['matrix', 'backup', 'backup-s3']}] if matrix_backup_postgres_s3_enabled else [])
+    +
     ([{'name': 'matrix-alertmanager-receiver.service', 'priority': 2200, 'groups': ['matrix', 'alertmanager-receiver']}] if matrix_alertmanager_receiver_enabled else [])
     +
     ([{'name': 'matrix-authentication-service.service', 'priority': 2200, 'groups': ['matrix', 'matrix-authentication-service']}] if matrix_authentication_service_enabled else [])
@@ -6385,3 +6387,12 @@ matrix_livekit_jwt_service_environment_variable_livekit_secret: "{{ '%s' | forma
 # /matrix-livekit-jwt-service                                          #
 #                                                                      #
 ########################################################################
+
+########################################################################
+#                                                                      #
+# /com.devture.ansible.role.traefik_certs_dumper                       #
+#                                                                      #
+########################################################################
+
+matrix_backup_postgres_s3_enabled: false
+matrix_backup_postgres_s3_identifier: "matrix-backup-postgres-s3"
