@@ -1,0 +1,11 @@
+#jinja2: lstrip_blocks: "True"
+
+[Unit]
+Description=Backup timer for Matrix Postgres Server
+
+[Timer]
+OnCalendar=Tue,Thu,Sat 02:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -8,3 +8,9 @@
   ansible.builtin.apt:
     name: fuse
     state: present
+
+
+- name: Ensure s4cmd installed (Debian/Raspbian)
+  ansible.builtin.apt:
+    name: s4cmd
+    state: present

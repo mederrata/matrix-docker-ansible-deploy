@@ -283,6 +283,13 @@ devture_systemd_service_manager_services_list_auto: |
     }] if backup_borg_enabled else [])
     +
     ([{
+      'name': (matrix_backup_postgres_s3_identifier + '.timer'),
+      'priority': 5000,
+      'restart_necessary': (matrix_backup_postgres_s3_necessary | bool),
+      'groups': ['matrix', 'backup', 'backup-s3'],
+    }] if matrix_backup_postgres_s3_enabled else [])
+    +
+    ([{
       'name': 'matrix-alertmanager-receiver.service',
       'priority': 2200,
       'restart_necessary': (matrix_alertmanager_receiver_restart_necessary | bool),
@@ -6242,3 +6249,6 @@ matrix_livekit_jwt_service_environment_variable_livekit_full_access_homeservers_
 # /matrix-livekit-jwt-service                                          #
 #                                                                      #
 ########################################################################
+
+matrix_backup_postgres_s3_enabled: false
+matrix_backup_postgres_s3_identifier: "matrix-backup-postgres-s3"
