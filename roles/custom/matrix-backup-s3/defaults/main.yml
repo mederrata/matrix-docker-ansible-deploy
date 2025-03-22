@@ -14,5 +14,5 @@ matrix_backup_postgres_s3_systemd_required_services_list: |
   {{
     ['docker.service']
     +
-    ([devture_postgres_identifier ~ '.service'] if postgres_enabled else [])
+    ([postgres_identifier ~ '.service'] if postgres_enabled else [])
   }}
