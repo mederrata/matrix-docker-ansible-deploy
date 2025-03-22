@@ -18,16 +18,16 @@ Environment=S3_BUCKET_NAME={{ matrix_backup_postgres_s3_bucket }}
 Environment=S3_ENDPOINT_URL="--endpoint-url={{ matrix_backup_postgres_s3_endpoint }}"
 {% endif %}
 {% if matrix_backup_postgres_s3_access_key %}
-Environment=S3_ACCESS_KEY="{{matrix_backup_postgres_s3_access_key }}"
+Environment=S3_ACCESS_KEY="{{ matrix_backup_postgres_s3_access_key }}"
 Environment=S3_SECRET_KEY="{{ matrix_backup_postgres_s3_secret_key }}"
 {% endif %}
 Type=oneshot
 ExecStartPre=/bin/sh -c '{{ devture_systemd_docker_base_host_command_docker }} \
 				run --rm --name matrix-s3-bucket-export \
-				--network={{ devture_postgres_container_network }} \
-				--env-file={{ devture_postgres_base_path }}/env-postgres-psql \
-				--user={{ devture_postgres_uid }}:{{ devture_postgres_gid }} \
-				{{ devture_postgres_container_image_latest }} \
+				--network={{ postgres_container_network }} \
+				--env-file={{ matrix_postgres_base_path }}/env-postgres-psql \
+				--user={{ matrix_postgres_uid }}:{{ matrix_postgres_gid }} \
+				{{ postgres_container_image_latest }} \
 				pg_dumpall -h matrix-postgres | gzip -c > /tmp/postgres-backup.sql.gz'
 
 ExecStart=/bin/sh -c 's4cmd put /tmp/postgres-backup.sql.gz ${S3_BUCKET_NAME}$$(date +%%Y-%%m-%%d)/ $S3_ENDPOINT_URL && rm /tmp/postgres-backup.sql.gz'
