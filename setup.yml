@@ -140,6 +140,7 @@
     - role: galaxy/postgres_backup
 
     - role: galaxy/backup_borg
+    - role: custom/matrix-backup-s3
 
     - custom/matrix-user-creator
     - custom/matrix-common-after
@@ -164,4 +165,3 @@
         - install-all
 
     - role: galaxy/playbook_runtime_messages
-    - role: custom/matrix-backup-s3
